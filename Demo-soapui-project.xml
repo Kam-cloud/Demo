@@ -305,7 +305,7 @@ import com.eviware.soapui.support.GroovyUtils
 import com.eviware.soapui.impl.wsdl.testcase.WsdlTestRunContext	
 		
 		//CSV Code
-		File file = new File("/Users/kamilichundru/Documents/Demo/Book1.xlsx");   //creating a new file instance  
+		File file = new File(context.expand('${#Project#ExcelFile}'));   //creating a new file instance  
 		FileInputStream fis = new FileInputStream(file);   //obtaining bytes from the file  
 		//creating Workbook instance that refers to .xlsx file  
 		XSSFWorkbook wb = new XSSFWorkbook(fis);   
@@ -354,7 +354,7 @@ import com.eviware.soapui.impl.wsdl.testcase.WsdlTestRunContext
 					break; 
 					 
 				}   
-			
+			// Update both the Input Parameter in the Request 
 			if(firstParam!=0 || secondParam!=0|| expectedVal!=0)
 			{
 				newReq.setNodeValue(firstXpathParam ,firstParam) 	// Assign value to node from firstParam
@@ -380,21 +380,19 @@ import com.eviware.soapui.impl.wsdl.testcase.WsdlTestRunContext
 
 			def getResponse = addResponse.getNodeValue(ResponseXpathParam)
 
-			log.info getResponse
-			log.info expectedVal
 			
 			//Compare the Response Xpath Node value with the Expected Value
 			
 			
-			//Common Utilities
-			def PATH_TO_SCRIPTS = "/Users/kamilichundru/Documents/groovy-3.0.4/bin/";
-			File fSource = new File(PATH_TO_SCRIPTS, "SimpleLibrary.groovy");
+			//Load Groovy shared Library from file
+			def PATH_TO_SCRIPTS = context.expand('${#Project#FilePath}');
+			File fSource = new File(PATH_TO_SCRIPTS, context.expand('${#Project#GroovyFile}'));
 			Class fClass = new GroovyClassLoader(getClass().getClassLoader()).parseClass(fSource)
 			GroovyObject fObject = (GroovyObject) fClass.newInstance(log,context,testRunner)
 			
 			fObject.asserted(getResponse, expectedVal.toString())	
-			fObject.asserted("1","2")
-			//log.info getResponse
+			
+			// Assertion without using Shared Libraries
 			try {
 				assert getResponse.equals(expectedVal.toString()) 
 				log.info " Assertion Passed - No issues"
@@ -527,8 +525,16 @@ else
   </con:mockService>
   <con:properties>
     <con:property>
-      <con:name>Id</con:name>
-      <con:value>123</con:value>
+      <con:name>FilePath</con:name>
+      <con:value>/Users/kamilichundru/Documents/Demo/</con:value>
+    </con:property>
+    <con:property>
+      <con:name>ExcelFile</con:name>
+      <con:value>/Users/kamilichundru/Documents/Demo/Book1.xlsx</con:value>
+    </con:property>
+    <con:property>
+      <con:name>GroovyFile</con:name>
+      <con:value>SimpleLibrary.groovy</con:value>
     </con:property>
   </con:properties>
   <con:wssContainer/>
