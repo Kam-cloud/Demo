@@ -6,10 +6,10 @@ Once the Project is cloned, Please update the following parameter at the Project
 2) ExcelFile
 3) GroovyFile
 
-Copy the following Libraries to the following Jar files into %SoapUI%/bin/ext
+Copy the following Libraries to the following Jar files into %SoapUI%/bin/ext and restart the SoapUI
 
-1) dom4j-1.6.1.jar
-2) poi-3.9.jar
-3) poi-ooxml-3.9.jar
-4) poi-ooxml-schemas-3.9.jar
+1) commons-collections4-4.1.jar
+2) poi-3.17.jar
+3) poi-ooxml-3.17.jar
+4) poi-ooxml-schemas-3.17.jar
 5) xmlbeans-2.6.0.jar
